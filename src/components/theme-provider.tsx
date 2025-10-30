@@ -52,8 +52,13 @@ export function ThemeProvider({ defaultTheme = "light", children }: ThemeProvide
       return;
     }
     const root = document.documentElement;
+    const body = document.body;
     root.setAttribute("data-theme", theme);
     root.classList.toggle("dark", theme === "dark");
+    if (body) {
+      body.setAttribute("data-theme", theme);
+      body.classList.toggle("dark", theme === "dark");
+    }
     window.localStorage.setItem(STORAGE_KEY, theme);
   }, [theme]);
 
@@ -95,4 +100,3 @@ export function useTheme() {
   }
   return context;
 }
-

@@ -11,6 +11,12 @@ export interface SecurityIssue {
   evidence?: string;
   references?: Array<{ label: string; url: string }>;
   cve?: string;
+  cvss?: {
+    score: number;
+    vector: string;
+    version: string;
+  };
+  cwes?: string[];
   recommendedActions: string[];
 }
 

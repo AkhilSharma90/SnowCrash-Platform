@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { ProfileMenu } from "@/components/profile-menu";
 import Link from "next/link";
 import "./globals.css";
 
@@ -27,13 +28,27 @@ export const metadata: Metadata = {
   keywords: ["LLM", "security", "Snowcrash", "trust center", "AI risk", "governance"],
 };
 
+const PRIMARY_NAV = [
+  { label: "Catalogue", href: "/#catalogue" },
+  { label: "Benchmarks", href: "/#benchmark" },
+  { label: "Signals", href: "/#signals" },
+  { label: "Datasets", href: "/#datasets" },
+  { label: "Supply chain", href: "/#supply-chain" },
+  { label: "Leaderboard", href: "/#leaderboard" },
+  { label: "Issue submission", href: "/#issue-submission" },
+  { label: "Bug bounty", href: "/#bug-bounty" },
+  { label: "Analytics", href: "/#analytics" },
+  { label: "API access", href: "/#api-access" },
+  { label: "About", href: "/#about" },
+];
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-theme="light" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col bg-[var(--background)] text-[var(--foreground)] antialiased`}>
         <ThemeProvider>
           <header className="border-b border-slate-200/80 bg-white/90 py-4 shadow-[0_4px_16px_rgba(15,23,42,0.04)] backdrop-blur dark:border-slate-900/60 dark:bg-slate-950/70">
@@ -47,25 +62,25 @@ export default function RootLayout({
                   <p className="text-lg font-semibold text-slate-900 dark:text-white">LLM Security Trust Center</p>
                 </div>
               </Link>
-              <div className="flex flex-wrap items-center gap-3">
-                <nav className="flex flex-wrap items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-                  <Link
-                    href="#models"
-                    className="rounded-full px-4 py-2 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-900/70 dark:hover:text-slate-100"
-                  >
-                    Models
-                  </Link>
-                  <Link
-                    href="#about"
-                    className="rounded-full px-4 py-2 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-900/70 dark:hover:text-slate-100"
-                  >
-                    About
-                  </Link>
+              <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end sm:gap-4">
+                <nav className="flex w-full items-center gap-1 overflow-x-auto rounded-full border border-slate-200/70 bg-white/70 px-2 py-1.5 text-sm text-slate-500 shadow-sm dark:border-slate-800/60 dark:bg-slate-950/40 dark:text-slate-400">
+                  {PRIMARY_NAV.map((item) => (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      className="whitespace-nowrap rounded-full px-3 py-1.5 transition hover:bg-slate-900/5 hover:text-slate-900 dark:hover:bg-slate-900/70 dark:hover:text-slate-100"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
                 </nav>
-                <ThemeToggle />
-                <Button variant="outline" size="sm" className="rounded-full border-slate-200 px-4 text-xs dark:border-slate-800" asChild>
-                  <Link href="mailto:security@snowcrash.ai">Report issue</Link>
-                </Button>
+                <div className="flex flex-wrap items-center justify-end gap-3">
+                  <ThemeToggle />
+                  <ProfileMenu />
+                  <Button variant="outline" size="sm" className="rounded-full border-slate-200 px-4 text-xs dark:border-slate-800" asChild>
+                    <Link href="mailto:security@snowcrash.ai">Report issue</Link>
+                  </Button>
+                </div>
               </div>
             </div>
           </header>
