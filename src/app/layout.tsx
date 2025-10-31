@@ -59,16 +59,18 @@ export default function RootLayout({
                 <span>Snowcrash</span>
                 <span>Trust Centre</span>
               </Link>
-              <nav className="flex w-full flex-wrap items-center justify-start gap-1 rounded-full border border-slate-200/70 bg-white/70 px-2 py-1.5 text-sm text-slate-500 shadow-sm dark:border-slate-800/60 dark:bg-slate-950/40 dark:text-slate-400 sm:justify-center">
-                {PRIMARY_NAV.map((item) => (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className="whitespace-nowrap rounded-full px-3 py-1.5 transition hover:bg-slate-900/5 hover:text-slate-900 dark:hover:bg-slate-900/70 dark:hover:text-slate-100"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+              <nav className="flex w-full justify-center px-1">
+                <div className="grid w-full max-w-4xl grid-cols-2 gap-2 rounded-2xl border border-slate-200/70 bg-white/70 p-3 text-sm text-slate-500 shadow-sm dark:border-slate-800/60 dark:bg-slate-950/40 dark:text-slate-400 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                  {PRIMARY_NAV.map((item) => (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      className="flex min-h-[2.5rem] items-center justify-center whitespace-nowrap rounded-xl px-3 py-2 font-medium text-slate-600 transition hover:bg-slate-900/5 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-900/70 dark:hover:text-slate-100"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
               </nav>
               <div className="flex items-center justify-end gap-3">
                 <ThemeToggle />
