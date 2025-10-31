@@ -81,7 +81,11 @@ export default function Home() {
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <Button size="lg" className="rounded-full px-6" asChild>
+              <Button
+                size="lg"
+                className="rounded-full border-transparent bg-gradient-to-r from-slate-900 via-indigo-800 to-slate-900 px-6 text-white shadow-[0_22px_55px_rgba(79,70,229,0.28)] transition hover:from-indigo-800 hover:via-slate-900 hover:to-indigo-700 dark:from-indigo-300 dark:via-slate-200 dark:to-sky-200 dark:text-slate-950"
+                asChild
+              >
                 <Link href="/catalogue">Explore catalogue</Link>
               </Button>
               <Button
