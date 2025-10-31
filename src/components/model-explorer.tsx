@@ -1,7 +1,7 @@
 "use client";
 
 import type { Dispatch, SetStateAction } from "react";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import Link from "next/link";
 import { ALL_TAGS, MODEL_DATA, type ModelRecord, type SeverityLevel } from "@/data/models";
 import { ModelCard } from "./model-card";
@@ -159,11 +159,41 @@ const API_ENDPOINTS = [
   },
 ];
 
-export function ModelExplorer() {
+const ALL_SECTIONS = [
+  "catalogue",
+  "benchmark",
+  "signals",
+  "datasets",
+  "supply-chain",
+  "leaderboard",
+  "issue-submission",
+  "bug-bounty",
+  "analytics",
+  "api-access",
+] as const;
+
+type ExplorerSection = (typeof ALL_SECTIONS)[number];
+
+interface ModelExplorerProps {
+  sections?: readonly ExplorerSection[];
+  showOverview?: boolean;
+}
+
+export function ModelExplorer({ sections, showOverview = true }: ModelExplorerProps) {
   const [query, setQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [riskFilters, setRiskFilters] = useState<string[]>([]);
   const [sort, setSort] = useState<SortKey>("score-desc");
+
+  const activeSections = useMemo(() => {
+    const list: readonly ExplorerSection[] = sections && sections.length ? sections : ALL_SECTIONS;
+    return new Set<ExplorerSection>(list);
+  }, [sections]);
+
+  const shouldRender = useCallback(
+    (section: ExplorerSection) => activeSections.has(section),
+    [activeSections],
+  );
 
   const filteredModels = useMemo(() => {
     return MODEL_DATA.filter((model) => {
@@ -279,106 +309,109 @@ export function ModelExplorer() {
 
   return (
     <section className="space-y-10">
-      <div className="relative overflow-hidden rounded-[36px] border border-slate-200/70 bg-white px-8 py-10 shadow-[0_50px_120px_rgba(15,23,42,0.12)] sm:px-12 dark:border-slate-900/60 dark:bg-slate-950/70">
-        <div className="pointer-events-none absolute -left-20 top-10 h-72 w-72 rounded-full bg-indigo-100/60 blur-3xl dark:bg-indigo-500/20" aria-hidden />
-        <div className="pointer-events-none absolute -right-16 bottom-0 h-64 w-64 rounded-full bg-sky-100/60 blur-3xl dark:bg-sky-500/20" aria-hidden />
-        <div className="relative grid gap-10 lg:grid-cols-[1.6fr_1fr]">
-          <div className="space-y-6">
-            <Badge variant="soft" className="bg-indigo-500/10 text-indigo-700 shadow-sm dark:bg-indigo-500/20 dark:text-indigo-100">
-              Live trust cockpit
-            </Badge>
-            <div className="space-y-3">
-              <h2 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
-                Curate the intelligence slice that matches your risk appetite
-              </h2>
-              <p className="max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300/80">
-                Blend catalogue filters, benchmark comparisons, signal feeds, and supply-chain telemetry without leaving the Snowcrash command centre.
-              </p>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-3">
-              <Insight
-                title="Models in scope"
-                value={`${filteredModels.length || MODEL_DATA.length}`}
-                hint="Driven by your active filters and ready for deep-dive review."
-              />
-              <Insight
-                title="Average score"
-                value={`${averageScore}`}
-                hint="Weighted security score across the current catalogue slice."
-              />
-              <Insight
-                title="Framework coverage"
-                value={`${frameworksTracked}`}
-                hint="Unique assurance frameworks represented in this view."
-              />
-            </div>
-          </div>
-          <div className="space-y-5">
-            <div className="rounded-3xl border border-slate-200/70 bg-white/80 p-5 text-sm shadow-lg backdrop-blur-sm dark:border-slate-800/60 dark:bg-slate-950/50">
-              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400 dark:text-slate-500">
-                Signal ticker
-              </p>
-              <div className="mt-3 space-y-3">
-                {advisoryFeed.slice(0, 4).map((issue) => (
-                  <div
-                    key={`${issue.model}-${issue.id}`}
-                    className="rounded-2xl border border-slate-200/60 bg-white/70 p-3 shadow-sm transition hover:border-indigo-200 hover:shadow-[0_16px_30px_rgba(79,70,229,0.12)] dark:border-slate-800/60 dark:bg-slate-950/60 dark:hover:border-indigo-500/40"
-                  >
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="text-xs uppercase tracking-[0.32em] text-slate-400 dark:text-slate-500">{issue.model}</p>
-                      <span className={`rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] ${SEVERITY_STYLES[issue.severity]}`}>
-                        {issue.severity}
-                      </span>
-                    </div>
-                    <p className="mt-1 text-sm font-semibold text-slate-900 dark:text-white">{issue.title}</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      {issue.vector} · {issue.discovered}
-                    </p>
-                  </div>
-                ))}
+      {showOverview && (
+        <div className="relative overflow-hidden rounded-[36px] border border-slate-200/70 bg-white px-8 py-10 shadow-[0_50px_120px_rgba(15,23,42,0.12)] sm:px-12 dark:border-slate-900/60 dark:bg-slate-950/70">
+          <div className="pointer-events-none absolute -left-20 top-10 h-72 w-72 rounded-full bg-indigo-100/60 blur-3xl dark:bg-indigo-500/20" aria-hidden />
+          <div className="pointer-events-none absolute -right-16 bottom-0 h-64 w-64 rounded-full bg-sky-100/60 blur-3xl dark:bg-sky-500/20" aria-hidden />
+          <div className="relative grid gap-10 lg:grid-cols-[1.6fr_1fr]">
+            <div className="space-y-6">
+              <Badge variant="soft" className="bg-indigo-500/10 text-indigo-700 shadow-sm dark:bg-indigo-500/20 dark:text-indigo-100">
+                Live trust cockpit
+              </Badge>
+              <div className="space-y-3">
+                <h2 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+                  Curate the intelligence slice that matches your risk appetite
+                </h2>
+                <p className="max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300/80">
+                  Blend catalogue filters, benchmark comparisons, signal feeds, and supply-chain telemetry without leaving the Snowcrash command centre.
+                </p>
               </div>
-              {topIssue && (
-                <Link
-                  href={`/models/${topIssue.slug}`}
-                  className="mt-4 inline-flex items-center text-xs font-semibold uppercase tracking-[0.28em] text-indigo-600 underline-offset-4 hover:underline dark:text-indigo-300"
-                >
-                  Dive into latest signal →
-                </Link>
+              <div className="grid gap-4 sm:grid-cols-3">
+                <Insight
+                  title="Models in scope"
+                  value={`${filteredModels.length || MODEL_DATA.length}`}
+                  hint="Driven by your active filters and ready for deep-dive review."
+                />
+                <Insight
+                  title="Average score"
+                  value={`${averageScore}`}
+                  hint="Weighted security score across the current catalogue slice."
+                />
+                <Insight
+                  title="Framework coverage"
+                  value={`${frameworksTracked}`}
+                  hint="Unique assurance frameworks represented in this view."
+                />
+              </div>
+            </div>
+            <div className="space-y-5">
+              <div className="rounded-3xl border border-slate-200/70 bg-white/80 p-5 text-sm shadow-lg backdrop-blur-sm dark:border-slate-800/60 dark:bg-slate-950/50">
+                <p className="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400 dark:text-slate-500">
+                  Signal ticker
+                </p>
+                <div className="mt-3 space-y-3">
+                  {advisoryFeed.slice(0, 4).map((issue) => (
+                    <div
+                      key={`${issue.model}-${issue.id}`}
+                      className="rounded-2xl border border-slate-200/60 bg-white/70 p-3 shadow-sm transition hover:border-indigo-200 hover:shadow-[0_16px_30px_rgba(79,70,229,0.12)] dark:border-slate-800/60 dark:bg-slate-950/60 dark:hover:border-indigo-500/40"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="text-xs uppercase tracking-[0.32em] text-slate-400 dark:text-slate-500">{issue.model}</p>
+                        <span className={`rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] ${SEVERITY_STYLES[issue.severity]}`}>
+                          {issue.severity}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-sm font-semibold text-slate-900 dark:text-white">{issue.title}</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        {issue.vector} · {issue.discovered}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+                {topIssue && (
+                  <Link
+                    href={`/models/${topIssue.slug}`}
+                    className="mt-4 inline-flex items-center text-xs font-semibold uppercase tracking-[0.28em] text-indigo-600 underline-offset-4 hover:underline dark:text-indigo-300"
+                  >
+                    Dive into latest signal →
+                  </Link>
+                )}
+              </div>
+              {highestRiskModel && (
+                <div className="rounded-3xl border border-rose-200/60 bg-rose-50/70 p-5 text-sm text-rose-700 shadow-sm dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-100">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <p className="text-xs font-semibold uppercase tracking-[0.32em]">Critical watch</p>
+                    <Badge variant="soft" className="bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-100">
+                      {highestRiskModel.riskLevel}
+                    </Badge>
+                  </div>
+                  <p className="mt-2 text-base font-semibold text-rose-800 dark:text-rose-50">
+                    {highestRiskModel.name} · {highestRiskModel.provider}
+                  </p>
+                  <p className="mt-1 text-xs leading-5 text-rose-600 dark:text-rose-100/80">
+                    {highestRiskModel.summary.slice(0, 150)}
+                    {highestRiskModel.summary.length > 150 ? "…" : ""}
+                  </p>
+                  <div className="mt-3 flex flex-wrap items-center gap-3">
+                    <Link
+                      href={`/models/${highestRiskModel.slug}`}
+                      className="text-xs font-semibold uppercase tracking-[0.28em] text-rose-700 underline-offset-4 hover:underline dark:text-rose-100"
+                    >
+                      View mitigation matrix →
+                    </Link>
+                    <span className="text-xs text-rose-500/80 dark:text-rose-200/60">
+                      {highestRiskModel.issues.filter((issue) => issue.severity === "critical").length} critical advisories open
+                    </span>
+                  </div>
+                </div>
               )}
             </div>
-            {highestRiskModel && (
-              <div className="rounded-3xl border border-rose-200/60 bg-rose-50/70 p-5 text-sm text-rose-700 shadow-sm dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-100">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <p className="text-xs font-semibold uppercase tracking-[0.32em]">Critical watch</p>
-                  <Badge variant="soft" className="bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-100">
-                    {highestRiskModel.riskLevel}
-                  </Badge>
-                </div>
-                <p className="mt-2 text-base font-semibold text-rose-800 dark:text-rose-50">
-                  {highestRiskModel.name} · {highestRiskModel.provider}
-                </p>
-                <p className="mt-1 text-xs leading-5 text-rose-600 dark:text-rose-100/80">
-                  {highestRiskModel.summary.slice(0, 150)}
-                  {highestRiskModel.summary.length > 150 ? "…" : ""}
-                </p>
-                <div className="mt-3 flex flex-wrap items-center gap-3">
-                  <Link
-                    href={`/models/${highestRiskModel.slug}`}
-                    className="text-xs font-semibold uppercase tracking-[0.28em] text-rose-700 underline-offset-4 hover:underline dark:text-rose-100"
-                  >
-                    View mitigation matrix →
-                  </Link>
-                  <span className="text-xs text-rose-500/80 dark:text-rose-200/60">
-                    {highestRiskModel.issues.filter((issue) => issue.severity === "critical").length} critical advisories open
-                  </span>
-                </div>
-              </div>
-            )}
           </div>
         </div>
-      </div>
+      )}
 
-      <section id="catalogue" className="scroll-mt-32 space-y-6">
+      {shouldRender("catalogue") && (
+        <section id="catalogue" className="scroll-mt-32 space-y-6">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400 dark:text-slate-500">Catalogue</p>
@@ -471,9 +504,11 @@ export function ModelExplorer() {
             ))}
           </div>
         )}
-      </section>
+        </section>
+      )}
 
-      <section id="benchmark" className="scroll-mt-32 space-y-6">
+      {shouldRender("benchmark") && (
+        <section id="benchmark" className="scroll-mt-32 space-y-6">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400 dark:text-slate-500">Benchmarks</p>
@@ -524,9 +559,11 @@ export function ModelExplorer() {
             </Table>
           </CardContent>
         </Card>
-      </section>
+        </section>
+      )}
 
-      <section id="signals" className="scroll-mt-32 space-y-6">
+      {shouldRender("signals") && (
+        <section id="signals" className="scroll-mt-32 space-y-6">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400 dark:text-slate-500">Signals</p>
@@ -614,9 +651,11 @@ export function ModelExplorer() {
             </CardContent>
           </Card>
         </div>
-      </section>
+        </section>
+      )}
 
-      <section id="datasets" className="scroll-mt-32 space-y-6">
+      {shouldRender("datasets") && (
+        <section id="datasets" className="scroll-mt-32 space-y-6">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400 dark:text-slate-500">Datasets</p>
@@ -670,9 +709,11 @@ export function ModelExplorer() {
             ))}
           </CardContent>
         </Card>
-      </section>
+        </section>
+      )}
 
-      <section id="supply-chain" className="scroll-mt-32 space-y-6">
+      {shouldRender("supply-chain") && (
+        <section id="supply-chain" className="scroll-mt-32 space-y-6">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400 dark:text-slate-500">Supply chain</p>
@@ -731,8 +772,10 @@ export function ModelExplorer() {
             </Table>
           </CardContent>
         </Card>
-      </section>
+        </section>
+      )}
 
+      {shouldRender("leaderboard") && (
         <section id="leaderboard" className="scroll-mt-32 space-y-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -817,7 +860,9 @@ export function ModelExplorer() {
             </Card>
           </div>
         </section>
+      )}
 
+      {shouldRender("issue-submission") && (
         <section id="issue-submission" className="scroll-mt-32 space-y-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -904,7 +949,9 @@ export function ModelExplorer() {
             </CardContent>
           </Card>
         </section>
+      )}
 
+      {shouldRender("bug-bounty") && (
         <section id="bug-bounty" className="scroll-mt-32 space-y-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -985,7 +1032,9 @@ export function ModelExplorer() {
             </CardContent>
           </Card>
         </section>
+      )}
 
+      {shouldRender("analytics") && (
         <section id="analytics" className="scroll-mt-32 space-y-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -1089,7 +1138,9 @@ export function ModelExplorer() {
             </Card>
           </div>
         </section>
+      )}
 
+      {shouldRender("api-access") && (
         <section id="api-access" className="scroll-mt-32 space-y-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -1153,6 +1204,7 @@ export function ModelExplorer() {
             </CardContent>
           </Card>
         </section>
+      )}
     </section>
   );
 }
