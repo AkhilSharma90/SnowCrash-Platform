@@ -5,7 +5,7 @@ export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-        "rounded-3xl border border-slate-200/90 bg-white/90 shadow-[0_28px_58px_rgba(15,23,42,0.08)] transition dark:border-slate-800/70 dark:bg-slate-950/70",
+        "rounded-3xl border border-[color:var(--border)] bg-[var(--card)] shadow-[var(--shadow)] transition",
         className,
       )}
       {...props}
@@ -38,4 +38,3 @@ export function CardContent({ className, ...props }: HTMLAttributes<HTMLDivEleme
 export function CardFooter({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return <div className={cn("flex items-center p-6 pt-0", className)} {...props} />;
 }
-
