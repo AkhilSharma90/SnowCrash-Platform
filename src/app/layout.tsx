@@ -54,10 +54,27 @@ export default function RootLayout({
             <div className="mx-auto grid w-full max-w-7xl gap-4 px-4 sm:grid-cols-[auto_1fr_auto] sm:items-center sm:px-6 lg:px-8">
               <Link
                 href="/"
-                className="flex flex-col text-[11px] font-semibold uppercase leading-tight tracking-[0.28em] text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+                className="flex items-center gap-4 text-[11px] font-semibold uppercase leading-tight tracking-[0.28em] text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
               >
-                <span>Snowcrash</span>
-                <span>Trust Centre</span>
+                <span className="flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full border border-slate-200 bg-white/80 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
+                  <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    className="h-10 w-10 text-slate-600 dark:text-slate-300"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 3 5 6.2v5.6c0 4.9 3.6 9.4 7 10.6 3.4-1.2 7-5.7 7-10.6V6.2L12 3z" />
+                    <path d="m9.5 11.5 2.2 2.2 3.8-3.8" />
+                  </svg>
+                </span>
+                <span className="flex flex-col leading-tight">
+                  <span>Snowcrash</span>
+                  <span>Trust Centre</span>
+                </span>
               </Link>
               <nav className="flex w-full justify-center px-1">
                 <div className="grid w-full max-w-4xl grid-cols-2 gap-2 rounded-2xl border border-slate-200/70 bg-white/70 p-3 text-sm text-slate-500 shadow-sm dark:border-slate-800/60 dark:bg-slate-950/40 dark:text-slate-400 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
