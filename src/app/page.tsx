@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { ModelExplorer } from "@/components/model-explorer";
 import { MODEL_DATA } from "@/data/models";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -50,7 +49,7 @@ export default function Home() {
                 Live telemetry sync in progress
               </span>
               <span className="hidden text-indigo-500 sm:inline dark:text-indigo-200/80">Next refresh in 12 minutes</span>
-              <Link href="#signals" className="inline-flex items-center gap-1 text-indigo-600 underline-offset-4 hover:underline dark:text-indigo-200">
+              <Link href="/signals" className="inline-flex items-center gap-1 text-indigo-600 underline-offset-4 hover:underline dark:text-indigo-200">
                 View signal feed →
               </Link>
             </div>
@@ -83,7 +82,7 @@ export default function Home() {
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <Button size="lg" className="rounded-full px-6" asChild>
-                <Link href="#catalogue">Explore catalogue</Link>
+                <Link href="/catalogue">Explore catalogue</Link>
               </Button>
               <Button
                 variant="outline"
@@ -96,7 +95,7 @@ export default function Home() {
                 </Link>
               </Button>
               <Link
-                href="#analytics"
+                href="/analytics"
                 className="flex items-center gap-2 rounded-full border border-slate-200/70 px-4 py-2 text-sm font-semibold text-slate-600 underline-offset-4 hover:underline dark:border-slate-800/60 dark:text-slate-300"
               >
                 Download board pack
@@ -240,8 +239,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      <ModelExplorer />
     </main>
   );
 }

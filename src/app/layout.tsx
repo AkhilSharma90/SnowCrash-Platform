@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Button } from "@/components/ui/button";
 import { ProfileMenu } from "@/components/profile-menu";
 import Link from "next/link";
 import "./globals.css";
@@ -29,17 +28,17 @@ export const metadata: Metadata = {
 };
 
 const PRIMARY_NAV = [
-  { label: "Catalogue", href: "/#catalogue" },
-  { label: "Benchmarks", href: "/#benchmark" },
-  { label: "Signals", href: "/#signals" },
-  { label: "Datasets", href: "/#datasets" },
-  { label: "Supply chain", href: "/#supply-chain" },
-  { label: "Leaderboard", href: "/#leaderboard" },
-  { label: "Issue submission", href: "/#issue-submission" },
-  { label: "Bug bounty", href: "/#bug-bounty" },
-  { label: "Analytics", href: "/#analytics" },
-  { label: "API access", href: "/#api-access" },
-  { label: "About", href: "/#about" },
+  { label: "Catalogue", href: "/catalogue" },
+  { label: "Benchmarks", href: "/benchmarks" },
+  { label: "Signals", href: "/signals" },
+  { label: "Datasets", href: "/datasets" },
+  { label: "Supply chain", href: "/supply-chain" },
+  { label: "Leaderboard", href: "/leaderboard" },
+  { label: "Issue submission", href: "/issue-submission" },
+  { label: "Bug bounty", href: "/bug-bounty" },
+  { label: "Analytics", href: "/analytics" },
+  { label: "API access", href: "/api-access" },
+  { label: "About", href: "/about" },
 ];
 
 export default function RootLayout({
@@ -52,35 +51,27 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col bg-[var(--background)] text-[var(--foreground)] antialiased`}>
         <ThemeProvider>
           <header className="border-b border-slate-200/80 bg-white/90 py-4 shadow-[0_4px_16px_rgba(15,23,42,0.04)] backdrop-blur dark:border-slate-900/60 dark:bg-slate-950/70">
-            <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-              <Link href="/" className="flex items-center gap-3 text-sm text-slate-500 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100">
-                <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white text-sm font-semibold uppercase tracking-[0.32em] text-slate-700 shadow-sm dark:border-slate-900 dark:bg-slate-950 dark:text-slate-200">
-                  SC
-                </span>
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.32em]">Snowcrash</p>
-                  <p className="text-lg font-semibold text-slate-900 dark:text-white">LLM Security Trust Center</p>
-                </div>
+            <div className="mx-auto grid w-full max-w-7xl gap-4 px-4 sm:grid-cols-[auto_1fr_auto] sm:items-center sm:px-6 lg:px-8">
+              <Link
+                href="/"
+                className="whitespace-nowrap text-sm font-semibold uppercase tracking-[0.32em] text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+              >
+                snowcrash test centre
               </Link>
-              <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end sm:gap-4">
-                <nav className="flex w-full items-center gap-1 overflow-x-auto rounded-full border border-slate-200/70 bg-white/70 px-2 py-1.5 text-sm text-slate-500 shadow-sm dark:border-slate-800/60 dark:bg-slate-950/40 dark:text-slate-400">
-                  {PRIMARY_NAV.map((item) => (
-                    <Link
-                      key={item.label}
-                      href={item.href}
-                      className="whitespace-nowrap rounded-full px-3 py-1.5 transition hover:bg-slate-900/5 hover:text-slate-900 dark:hover:bg-slate-900/70 dark:hover:text-slate-100"
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </nav>
-                <div className="flex flex-wrap items-center justify-end gap-3">
-                  <ThemeToggle />
-                  <ProfileMenu />
-                  <Button variant="outline" size="sm" className="rounded-full border-slate-200 px-4 text-xs dark:border-slate-800" asChild>
-                    <Link href="mailto:security@snowcrash.ai">Report issue</Link>
-                  </Button>
-                </div>
+              <nav className="flex w-full flex-wrap items-center justify-start gap-1 rounded-full border border-slate-200/70 bg-white/70 px-2 py-1.5 text-sm text-slate-500 shadow-sm dark:border-slate-800/60 dark:bg-slate-950/40 dark:text-slate-400 sm:justify-center">
+                {PRIMARY_NAV.map((item) => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className="whitespace-nowrap rounded-full px-3 py-1.5 transition hover:bg-slate-900/5 hover:text-slate-900 dark:hover:bg-slate-900/70 dark:hover:text-slate-100"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+              <div className="flex items-center justify-end gap-3">
+                <ThemeToggle />
+                <ProfileMenu />
               </div>
             </div>
           </header>
