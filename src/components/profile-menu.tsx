@@ -55,7 +55,7 @@ export function ProfileMenu() {
       </Button>
 
       {open && (
-        <div className="absolute right-0 z-40 mt-3 w-72 rounded-2xl border border-slate-200 bg-white/95 p-4 text-sm text-slate-600 shadow-[0_24px_48px_rgba(15,23,42,0.18)] backdrop-blur dark:border-slate-800 dark:bg-slate-950/90 dark:text-slate-300">
+        <div className="absolute right-0 z-50 mt-3 w-72 rounded-2xl border border-slate-200 bg-white/95 p-4 text-sm text-slate-600 shadow-[0_24px_48px_rgba(15,23,42,0.18)] backdrop-blur dark:border-slate-800 dark:bg-slate-950/90 dark:text-slate-300">
           <div className="flex items-center gap-3">
             <ProfileAvatar name={USER_PROFILE.name} size="lg" />
             <div>

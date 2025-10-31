@@ -50,13 +50,14 @@ export default function RootLayout({
     <html lang="en" data-theme="light" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col bg-[var(--background)] text-[var(--foreground)] antialiased`}>
         <ThemeProvider>
-          <header className="border-b border-slate-200/80 bg-white/90 py-4 shadow-[0_4px_16px_rgba(15,23,42,0.04)] backdrop-blur dark:border-slate-900/60 dark:bg-slate-950/70">
+          <header className="relative z-30 border-b border-slate-200/80 bg-white/90 py-4 shadow-[0_4px_16px_rgba(15,23,42,0.04)] backdrop-blur dark:border-slate-900/60 dark:bg-slate-950/70">
             <div className="mx-auto grid w-full max-w-7xl gap-4 px-4 sm:grid-cols-[auto_1fr_auto] sm:items-center sm:px-6 lg:px-8">
               <Link
                 href="/"
-                className="whitespace-nowrap text-sm font-semibold uppercase tracking-[0.32em] text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+                className="flex flex-col text-[11px] font-semibold uppercase leading-tight tracking-[0.28em] text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
               >
-                snowcrash test centre
+                <span>Snowcrash</span>
+                <span>Trust Centre</span>
               </Link>
               <nav className="flex w-full flex-wrap items-center justify-start gap-1 rounded-full border border-slate-200/70 bg-white/70 px-2 py-1.5 text-sm text-slate-500 shadow-sm dark:border-slate-800/60 dark:bg-slate-950/40 dark:text-slate-400 sm:justify-center">
                 {PRIMARY_NAV.map((item) => (
