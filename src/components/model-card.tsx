@@ -138,12 +138,20 @@ export function ModelCard({ model }: ModelCardProps) {
             </Badge>
           ))}
         </div>
-        <Link
-          href={`/models/${model.slug}`}
-          className="inline-flex h-9 items-center justify-center rounded-full border border-slate-200 bg-white px-4 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-slate-800 dark:bg-slate-950/60 dark:text-slate-200 dark:hover:bg-slate-900 dark:focus-visible:ring-indigo-500/40"
-        >
-          Open profile
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href={`/models/${model.slug}/signals`}
+            className="inline-flex h-9 items-center justify-center rounded-full border border-indigo-200 bg-indigo-50 px-4 text-xs font-semibold text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-indigo-500/50 dark:bg-indigo-500/10 dark:text-indigo-100 dark:hover:bg-indigo-500/20"
+          >
+            Signal grading
+          </Link>
+          <Link
+            href={`/models/${model.slug}`}
+            className="inline-flex h-9 items-center justify-center rounded-full border border-slate-200 bg-white px-4 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-slate-800 dark:bg-slate-950/60 dark:text-slate-200 dark:hover:bg-slate-900 dark:focus-visible:ring-indigo-500/40"
+          >
+            Open profile
+          </Link>
+        </div>
       </CardFooter>
     </Card>
   );
